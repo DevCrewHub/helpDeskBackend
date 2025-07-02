@@ -117,6 +117,15 @@ handling in a business context.
   }
   ```
 
+- `GET /api/customer/tickets` — Get all tickets created by the logged-in customer
+- `GET /api/customer/ticket/{id}` — Get a specific ticket by its ID (only if created by the logged-in customer)
+- `GET /api/customer/tickets/search/{title}` — Search tickets by title (created by the logged-in customer)
+- `PUT /api/customer/ticket/{id}/status` — Change the status of a ticket to CLOSED (only if created by the logged-in customer)
+
+  *Note: Only status change to CLOSED is allowed. Once closed, the ticket cannot be updated further.*
+
+- `DELETE /api/customer/ticket/{id}` — Delete a ticket by its ID (only if created by the logged-in customer)
+
 ## Project Structure
 ```
 HelpDeskPro/

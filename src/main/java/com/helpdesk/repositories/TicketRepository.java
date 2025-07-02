@@ -14,8 +14,10 @@ import java.util.List;
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
-//    List<Ticket> findByCustomer(User customer);
-//    
+    List<Ticket> findByCustomer(User customer);
+    List<Ticket> findByCustomerAndTitleContaining(User customer, String title);
+    Ticket findTicketByCustomerAndId(User assignedAgent, Long id);
+    
 //    List<Ticket> findByTicketStatus(TicketStatus ticketStatus);
 //
 //    List<Ticket> findByAssignedAgent(User assignedAgent);
@@ -24,11 +26,9 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 //
 //    List<Ticket> findByAssignedAgentAndTitleContaining(User assignedAgent, String title);
 //    
-//    List<Ticket> findByCustomerAndTitleContaining(User customer, String title);
 //    
 //    Ticket findTicketByAssignedAgentAndId(User assignedAgent, Long id);
 //    
-//    Ticket findTicketByCustomerAndId(User assignedAgent, Long id);
 //    
 //    List<Ticket> findByPriority(Priority priority);
 //    
