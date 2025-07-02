@@ -61,6 +61,13 @@ handling in a business context.
 - `POST /api/auth/signup` — Register a new user
 - `POST /api/auth/login` — Authenticate and receive a JWT token
 
+#### Department Admin APIs
+- `GET /api/admin/department` — Get all departments
+- `GET /api/admin/department/{id}` — Get department by ID
+- `POST /api/admin/department` — Create a new department
+- `PUT /api/admin/department/{id}` — Update a department
+- `DELETE /api/admin/department/{id}` — Delete a department
+
 ## Project Structure
 ```
 HelpDeskPro/

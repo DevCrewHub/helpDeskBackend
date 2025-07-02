@@ -25,4 +25,10 @@ public class Department {
 
 	@OneToMany(mappedBy = "department")
 	private List<User> users;
+
+	public Department() {}
+
+	public Department(String name) {
+		this.name = name;
+	}
 }
