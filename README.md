@@ -87,8 +87,8 @@ handling in a business context.
 - `PUT /api/admin/department/{id}` — Update a department
 - `DELETE /api/admin/department/{id}` — Delete a department
 
-#### Agent Management (Admin Only)
-- `POST /api/admin/agent` — Register a new agent (requires ADMIN role)
+#### Admin APIs
+- `POST /api/admin/agent` — Register a new agent
 
   **Request Body Example:**
   ```json
@@ -98,9 +98,11 @@ handling in a business context.
     "password": "password123",
     "fullName": "Agent One",
     "phoneNumber": "+1234567890",
-    "departmentName": "IT"
+    "departmentName": "Finance"
   }
   ```
+- `GET /api/admin/customers` — Get all customers
+- `GET /api/admin/agents` — Get all agents
 
 ## Project Structure
 ```
