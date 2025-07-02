@@ -6,6 +6,7 @@ import com.helpdesk.dto.UserDto;
 public interface AuthService {
 
 	UserDto signupUser(SignupRequest signupRequest);
+	UserDto signupAgent(SignupRequest signupRequest);
 
 	boolean hasUserWithUsername(String username);
 

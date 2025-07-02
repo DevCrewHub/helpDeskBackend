@@ -59,7 +59,26 @@ handling in a business context.
 
 #### Auth APIs
 - `POST /api/auth/signup` — Register a new user
+   
+   **Request Body Example:**
+  ```json
+  {
+    "userName": "cust1",
+    "email": "cust1@example.com",
+    "password": "password1234",
+    "fullName": "Customer One",
+    "phoneNumber": "+1234567890"
+  }
+  ```
 - `POST /api/auth/login` — Authenticate and receive a JWT token
+
+   **Request Body Example:**
+  ```json
+  {
+    "userName": "cust1",
+    "password": "password1234"
+  }
+  ```
 
 #### Department Admin APIs
 - `GET /api/admin/department` — Get all departments
@@ -67,6 +86,21 @@ handling in a business context.
 - `POST /api/admin/department` — Create a new department
 - `PUT /api/admin/department/{id}` — Update a department
 - `DELETE /api/admin/department/{id}` — Delete a department
+
+#### Agent Management (Admin Only)
+- `POST /api/admin/agent` — Register a new agent (requires ADMIN role)
+
+  **Request Body Example:**
+  ```json
+  {
+    "userName": "agent1",
+    "email": "agent1@example.com",
+    "password": "password123",
+    "fullName": "Agent One",
+    "phoneNumber": "+1234567890",
+    "departmentName": "IT"
+  }
+  ```
 
 ## Project Structure
 ```
