@@ -104,6 +104,19 @@ handling in a business context.
 - `GET /api/admin/customers` — Get all customers
 - `GET /api/admin/agents` — Get all agents
 
+#### Customer APIs
+- `POST /api/customer/ticket` — Create a new ticket
+
+  **Request Body Example:**
+  ```json
+  {
+    "title": "Cannot access email",
+    "description": "I am unable to access my company email account.",
+    "priority": "HIGH",
+    "departmentName": "Technical"
+  }
+  ```
+
 ## Project Structure
 ```
 HelpDeskPro/

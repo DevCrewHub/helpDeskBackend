@@ -46,9 +46,9 @@ public class AdminController {
 	}
 	
 	// Get all agents
-		@GetMapping("/agents")
-		public ResponseEntity<?> getAgents() {
-			return ResponseEntity.ok(adminService.getAgents());
-		}
+	@GetMapping("/agents")
+	public ResponseEntity<?> getAgents() {
+		return ResponseEntity.ok(adminService.getAgents());
+	}
 
 }
