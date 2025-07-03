@@ -107,4 +107,13 @@ public class AdminServiceImpl implements AdminService {
 				.collect(Collectors.toList());
 	}
 	
+	@Override
+	public List<TicketDto> filterTicketsByDepartmentName(String name) {
+		return ticketRepository.findByDepartmentName(name)
+				.stream()
+				.sorted(Comparator.comparing(Ticket::getCreatedDate).reversed())
+				.map(Ticket::getTicketDto)
+				.collect(Collectors.toList());
+	}
+	
 }

@@ -19,8 +19,8 @@ public interface AdminService {
 	
 	List<TicketDto> searchTicketByTitle(String title);
 	
-	List<TicketDto> filterTicketsByPriority(Priority priority);
-	
+	List<TicketDto> filterTicketsByPriority(Priority priority);	
 	List<TicketDto> filterTicketsByStatus(Status status);
+	List<TicketDto> filterTicketsByDepartmentName(String name);
 
 }

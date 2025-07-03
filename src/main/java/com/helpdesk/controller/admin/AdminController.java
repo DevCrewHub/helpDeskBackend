@@ -109,5 +109,10 @@ public class AdminController {
             return ResponseEntity.badRequest().build();
         }
     }
+    
+    @GetMapping("/tickets/department/{name}")
+    public ResponseEntity<List<TicketDto>> filterTicketsByDepartmentName(@PathVariable String name) {
+    	return ResponseEntity.ok(adminService.filterTicketsByDepartmentName(name));
+    }
 
 }
