@@ -141,4 +141,79 @@ public class AgentServiceImpl implements AgentService {
         return false;
     }
     
+    //All tickets
+  
+	@Override
+	public List<TicketDto> getAllTickets() {
+		return ticketRepository.findAll()
+				.stream()
+				.sorted(Comparator.comparing(Ticket::getCreatedDate).reversed())
+				.map(Ticket::getTicketDto)
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public TicketDto getTicketById(Long id) {
+		Optional<Ticket> optionalTicket = ticketRepository.findById(id);
+		return optionalTicket.map(Ticket::getTicketDto).orElse(null);
+	}
+
+	@Override
+	public List<TicketDto> searchTicketByTitle(String title) {
+		return ticketRepository.findAllByTitleContaining(title)
+				.stream()
+				.sorted(Comparator.comparing(Ticket::getCreatedDate).reversed())
+				.map(Ticket::getTicketDto)
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<TicketDto> filterTicketsByPriority(Priority priority) {
+		return ticketRepository.findByPriority(priority)
+				.stream()
+				.sorted(Comparator.comparing(Ticket::getCreatedDate).reversed())
+				.map(Ticket::getTicketDto)
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<TicketDto> filterTicketsByStatus(Status status) {
+		return ticketRepository.findByStatus(status)
+				.stream()
+				.sorted(Comparator.comparing(Ticket::getCreatedDate).reversed())
+				.map(Ticket::getTicketDto)
+				.collect(Collectors.toList());
+	}
+
+	@Override
+	public List<TicketDto> filterTicketsByDepartmentName(String name) {
+		return ticketRepository.findByDepartmentName(name)
+				.stream()
+				.sorted(Comparator.comparing(Ticket::getCreatedDate).reversed())
+				.map(Ticket::getTicketDto)
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+    public TicketDto assignTicketToMe(Long ticketId) {
+		User agent = jwtUtil.getLoggedInUser();
+	    if (agent == null) {
+	        throw new RuntimeException("Agent not authenticated");
+	    }
+
+	    Optional<Ticket> optionalTicket = ticketRepository.findById(ticketId);
+	    if (optionalTicket.isEmpty()) {
+	        throw new RuntimeException("Ticket not found");
+	    }
+
+	    Ticket ticket = optionalTicket.get();
+	    if (ticket.getAssignedAgent() != null) {
+	        throw new RuntimeException("Ticket is already assigned to another agent");
+	    }
+
+	    ticket.setAssignedAgent(agent);
+	    Ticket updatedTicket = ticketRepository.save(ticket);
+	    return updatedTicket.getTicketDto();
+    }
+    
 }

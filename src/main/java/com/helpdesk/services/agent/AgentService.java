@@ -7,14 +7,6 @@ import com.helpdesk.enums.Status;
 
 public interface AgentService {
 	
-//	List<TicketDto> getAllTickets();
-//    TicketDto getTicketById(Long id);    
-//    List<TicketDto> searchTicketByTitle(String title);    
-//    List<TicketDto> filterTicketsByPriority(Priority priority);
-//    List<TicketDto> filterTicketsByStatus(Status status);
-//    List<TicketDto> filterTicketsByDepartmentName(String name);
-    //assign tickets to themselves 
-	
     List<TicketDto> getAssignedTickets();
     TicketDto getAssignedTicketById(Long id);    
     List<TicketDto> searchAssignedTicketByTitle(String title);    
@@ -23,6 +15,13 @@ public interface AgentService {
     List<TicketDto> filterAssignedTicketsByDepartmentName(String name);
     TicketDto updatAssignedTicketePriority(Long ticketId, Priority priority);
     TicketDto updateAssignedTicketStatus(Long ticketId, Status newStatus);
+	
+	List<TicketDto> getAllTickets();
+    TicketDto getTicketById(Long id);    
+    List<TicketDto> searchTicketByTitle(String title);    
+    List<TicketDto> filterTicketsByPriority(Priority priority);
+    List<TicketDto> filterTicketsByStatus(Status status);
+    List<TicketDto> filterTicketsByDepartmentName(String name);
+    TicketDto assignTicketToMe(Long ticketId);
      
-    
 }

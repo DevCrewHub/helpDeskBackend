@@ -135,16 +135,26 @@ handling in a business context.
 
 - `DELETE /api/customer/ticket/{id}` — Delete a ticket by its ID (only if created by the logged-in customer)
 
-#### Agent APIs
+#### Agent APIs for assigned tickets
 
-- `GET /api/agent/tickets` — Get all tickets assigned to the logged-in agent
-- `GET /api/agent/ticket/{id}` — Get details of a specific ticket assigned to the agent
-- `GET /api/agent/tickets/search/{title}` — Search assigned tickets by title
-- `GET /api/agent/tickets/priority/{priority}` — Filter assigned tickets by priority (`LOW`, `MEDIUM`, `HIGH`)
-- `GET /api/agent/tickets/status/{status}` — Filter assigned tickets by status (`PENDING`, `IN_PROGRESS`, `RESOLVED`, `CLOSED`)
-- `GET /api/agent/tickets/department/{name}` — Filter assigned tickets by department name (partial or full match)
-- `PUT /api/agent/tickets/{ticketId}/priority?priority={priority}` — Update the priority of an assigned ticket
-- `PUT /api/agent/tickets/{ticketId}/status?status={status}` — Update the status of an assigned ticket(inprogress to resolved)
+- `GET /api/agent/assigned/tickets` — Get all tickets assigned to the logged-in agent
+- `GET /api/agent/assigned/ticket/{id}` — Get details of a specific ticket assigned to the agent
+- `GET /api/agent/assigned/tickets/search/{title}` — Search assigned tickets by title
+- `GET /api/agent/assigned/tickets/priority/{priority}` — Filter assigned tickets by priority (`LOW`, `MEDIUM`, `HIGH`)
+- `GET /api/agent/assigned/tickets/status/{status}` — Filter assigned tickets by status (`PENDING`, `IN_PROGRESS`, `RESOLVED`, `CLOSED`)
+- `GET /api/agent/assigned/tickets/department/{name}` — Filter assigned tickets by department name (partial or full match)
+- `PUT /api/agent/assigned/tickets/{ticketId}/priority?priority={priority}` — Update the priority of an assigned ticket
+- `PUT /api/agent/assigned/tickets/{ticketId}/status?status={status}` — Update the status of an assigned ticket(inprogress to resolved)
+
+#### Agent APIs for all tickets(assigned/unassigned)
+
+- `GET /api/agent/tickets` — Get all tickets (unfiltered, for agent dashboard)
+- `GET /api/agent/ticket/{id}` — Get details of a specific ticket (by ID)
+- `GET /api/agent/tickets/search/{title}` — Search all tickets by title
+- `GET /api/agent/tickets/priority/{priority}` — Filter all tickets by priority (`LOW`, `MEDIUM`, `HIGH`)
+- `GET /api/agent/tickets/status/{status}` — Filter all tickets by status (`PENDING`, `IN_PROGRESS`, `RESOLVED`, `CLOSED`)
+- `GET /api/agent/tickets/department/{name}` — Filter all tickets by department name (partial or full match)
+- `PUT /api/agent/tickets/{ticketId}/assign` — Assign the specified ticket to the logged-in agent  
 
 ## Project Structure
 ```

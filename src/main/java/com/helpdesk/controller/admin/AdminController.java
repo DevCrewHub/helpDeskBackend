@@ -19,7 +19,6 @@ import com.helpdesk.dto.UserDto;
 import com.helpdesk.enums.Priority;
 import com.helpdesk.enums.Status;
 import com.helpdesk.services.admin.AdminService;
-//import com.helpdesk.services.admin.RegisterAgentService;
 import com.helpdesk.services.auth.AuthService;
 
 import lombok.RequiredArgsConstructor;
@@ -84,7 +83,7 @@ public class AdminController {
     }
 	
 	@GetMapping("/tickets/search/{title}")
-    public ResponseEntity<List<TicketDto>> searchTask(@PathVariable String title) {
+    public ResponseEntity<List<TicketDto>> searchTicket(@PathVariable String title) {
         return ResponseEntity.ok(adminService.searchTicketByTitle(title));
     }
     
