@@ -15,7 +15,7 @@ handling in a business context.
 - Department management by admin
 - Agent signup with department selection by name
 - Ticket creation by customer (pending status)
-- Admin can view and assign pending tickets to agents
+- Admin can view all tickets, view ticket details, assign tickets to agents, and search/filter tickets by title, priority, or status
 - Agent can view tickets assigned to them and assign to themselves
 - Agent can update ticket status
 - Customer can close the ticket by changing it's status to closed
@@ -80,14 +80,8 @@ handling in a business context.
   }
   ```
 
-#### Department Admin APIs
-- `GET /api/admin/department` — Get all departments
-- `GET /api/admin/department/{id}` — Get department by ID
-- `POST /api/admin/department` — Create a new department
-- `PUT /api/admin/department/{id}` — Update a department
-- `DELETE /api/admin/department/{id}` — Delete a department
-
 #### Admin APIs
+
 - `POST /api/admin/agent` — Register a new agent
 
   **Request Body Example:**
@@ -103,6 +97,21 @@ handling in a business context.
   ```
 - `GET /api/admin/customers` — Get all customers
 - `GET /api/admin/agents` — Get all agents
+
+##### Department Admin APIs
+- `GET /api/admin/department` — Get all departments
+- `GET /api/admin/department/{id}` — Get department by ID
+- `POST /api/admin/department` — Create a new department
+- `PUT /api/admin/department/{id}` — Update a department
+- `DELETE /api/admin/department/{id}` — Delete a department
+
+##### Ticket Control APIs (Admin)
+- `GET /api/admin/tickets` — Get all tickets
+- `GET /api/admin/ticket/{id}` — Get ticket details by ticket ID
+- `PUT /api/admin/tickets/{ticketId}/assign?agentId={agentId}` — Assign a ticket to an agent
+- `GET /api/admin/tickets/search/{title}` — Search tickets by title
+- `GET /api/admin/tickets/priority/{priority}` — Filter tickets by priority (`LOW`, `MEDIUM`, `HIGH`)
+- `GET /api/admin/tickets/status/{status}` — Filter tickets by status (`PENDING`, `IN_PROGRESS`, `RESOLVED`, `CLOSED`)
 
 #### Customer APIs
 - `POST /api/customer/ticket` — Create a new ticket

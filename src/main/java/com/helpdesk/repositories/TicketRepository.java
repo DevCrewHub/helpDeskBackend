@@ -14,15 +14,18 @@ import java.util.List;
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
+	//customer
     List<Ticket> findByCustomer(User customer);
     List<Ticket> findByCustomerAndTitleContaining(User customer, String title);
     Ticket findTicketByCustomerAndId(User assignedAgent, Long id);
     
-//    List<Ticket> findByTicketStatus(TicketStatus ticketStatus);
+    //agent
+    List<Ticket> findAllByTitleContaining(String title);
+    List<Ticket> findByPriority(Priority priority);    
+    List<Ticket> findByStatus(Status Status);
 //
 //    List<Ticket> findByAssignedAgent(User assignedAgent);
 //    
-//    List<Ticket> findAllByTitleContaining(String title);
 //
 //    List<Ticket> findByAssignedAgentAndTitleContaining(User assignedAgent, String title);
 //    
@@ -30,7 +33,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 //    Ticket findTicketByAssignedAgentAndId(User assignedAgent, Long id);
 //    
 //    
-//    List<Ticket> findByPriority(Priority priority);
 //    
 //    List<Ticket> findByDepartmentName(String name);
 //    
