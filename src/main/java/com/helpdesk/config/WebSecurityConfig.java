@@ -41,7 +41,7 @@ public class WebSecurityConfig {
 				.requestMatchers("/api/auth/**").permitAll()
 			    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 				.requestMatchers("/api/admin/**").hasRole("ADMIN")
-				.requestMatchers("/api/employee/**").hasRole("CUSTOMER")
+				.requestMatchers("/api/customer/**").hasRole("CUSTOMER")
 				.requestMatchers("/api/agent/**").hasRole("AGENT")
 				.anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
