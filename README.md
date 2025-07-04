@@ -27,6 +27,7 @@ handling in a business context.
 - Hibernate/JPA
 - Lombok
 - MySQL
+- Swagger UI
 
 ## Getting Started
 
@@ -54,6 +55,20 @@ handling in a business context.
    mvnw.cmd spring-boot:run
    ```
 4. **The app will start on** `http://localhost:8082` **(or your configured port).**
+
+---
+
+## API Testing with Swagger UI
+
+This project includes [Swagger UI](https://swagger.io/tools/swagger-ui/) for interactive API documentation and testing. Once the application is running, you can access Swagger UI at:
+
+```
+http://localhost:8082/swagger-ui/index.html
+```
+
+Use this interface to explore available endpoints, view request/response schemas, and test API calls directly from your browser.
+
+---
 
 ### API Endpoints
 
