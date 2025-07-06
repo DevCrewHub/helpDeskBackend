@@ -1,6 +1,7 @@
 package com.helpdesk.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import com.helpdesk.enums.Priority;
 import com.helpdesk.enums.Status;
@@ -36,5 +37,8 @@ public class TicketDto {
 	private Long departmentId;
 
 	private String departmentName;
+
+	private List<CommentDto> comments;
+
 
 }

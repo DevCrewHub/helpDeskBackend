@@ -1,7 +1,9 @@
 package com.helpdesk.entities;
 
 import java.util.Date;
+import java.util.List;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -10,15 +12,11 @@ import com.helpdesk.dto.TicketDto;
 import com.helpdesk.enums.Priority;
 import com.helpdesk.enums.Status;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import java.util.stream.Collectors;
+
+
+
 
 @Data
 @Entity
@@ -65,18 +63,29 @@ public class Ticket {
 
 		ticketDto.setCustomerId(customer.getId());
 		ticketDto.setCustomerName(customer.getUsername());
-	
+
 		if (assignedAgent != null) {
 			ticketDto.setAgentId(assignedAgent.getId());
 			ticketDto.setAgentName(assignedAgent.getUsername());
 		}
-	
+
 		ticketDto.setDepartmentId(department.getId());
 		ticketDto.setDepartmentName(department.getName());
 		ticketDto.setStatus(status);
 		ticketDto.setCreatedDate(createdDate);
 		ticketDto.setPriority(priority);
+
+		//  <<<<< ADD THIS BLOCK >>>>>
+		// This maps the list of Comment entities to a list of CommentDto objects
+		if (comments != null) {
+			ticketDto.setComments(comments.stream().map(Comment::getCommentDto).collect(Collectors.toList()));
+		}
+
 		return ticketDto;
 	}
+
+	@OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+	private List<Comment> comments;
+
 
 }

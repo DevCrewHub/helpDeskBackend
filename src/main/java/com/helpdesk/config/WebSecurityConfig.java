@@ -34,16 +34,20 @@ public class WebSecurityConfig {
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final UserService userService;
 
+	// in file: src/main/java/com/helpdesk/config/WebSecurityConfig.java
+// Find the securityFilterChain bean and add a new rule.
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable).cors(cors -> {
-		}).authorizeHttpRequests(request -> request
-				.requestMatchers("/api/auth/**").permitAll()
-			    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-				.requestMatchers("/api/admin/**").hasRole("ADMIN")
-				.requestMatchers("/api/customer/**").hasRole("CUSTOMER")
-				.requestMatchers("/api/agent/**").hasRole("AGENT")
-				.anyRequest().authenticated())
+				}).authorizeHttpRequests(request -> request
+						.requestMatchers("/api/auth/**").permitAll()
+						.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+						.requestMatchers("/api/admin/**").hasRole("ADMIN")
+						.requestMatchers("/api/customer/**").hasRole("CUSTOMER")
+						.requestMatchers("/api/agent/**").hasRole("AGENT")
+						.requestMatchers("/api/comments/**").authenticated() //  <<<<< ADD THIS LINE
+						.anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
 				.authenticationProvider(authenticationProvider())
 				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -80,4 +84,6 @@ public class WebSecurityConfig {
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 		return config.getAuthenticationManager();
 	}
+
+
 }
