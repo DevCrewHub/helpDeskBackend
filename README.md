@@ -141,7 +141,7 @@ Use this interface to explore available endpoints, view request/response schemas
   }
   ```
 
-- `GET /api/customer/tickets` — Get all tickets created by the logged-in customer
+- `GET /api/customer/ticketsCreated` — Get all tickets created by the logged-in customer
 - `GET /api/customer/ticket/{id}` — Get a specific ticket by its ID (only if created by the logged-in customer)
 - `GET /api/customer/tickets/search/{title}` — Search tickets by title (created by the logged-in customer)
 - `PUT /api/customer/ticket/{id}/status` — Change the status of a ticket to CLOSED (only if created by the logged-in customer)
