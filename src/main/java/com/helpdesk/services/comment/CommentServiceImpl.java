@@ -24,6 +24,7 @@ public class CommentServiceImpl implements CommentService {
     private final JwtUtil jwtUtil;
     private final CommentRepository commentRepository;
 
+    // ✅ POST comment: Only assigned agent or ticket's customer can post
     @Override
     public CommentDto createComment(Long ticketId, String body) {
         User currentUser = jwtUtil.getLoggedInUser();
@@ -32,26 +33,29 @@ public class CommentServiceImpl implements CommentService {
         if (currentUser != null && optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();
 
-            // Security Check: Only the ticket's customer or assigned agent can comment.
-            boolean isCustomer = currentUser.getUserRole() == UserRole.CUSTOMER && ticket.getCustomer().getId().equals(currentUser.getId());
-            boolean isAgent = currentUser.getUserRole() == UserRole.AGENT && ticket.getAssignedAgent() != null && ticket.getAssignedAgent().getId().equals(currentUser.getId());
+            boolean isCustomer = currentUser.getUserRole() == UserRole.CUSTOMER &&
+                    ticket.getCustomer().getId().equals(currentUser.getId());
 
-            if (isCustomer || isAgent) {
+            boolean isAssignedAgent = currentUser.getUserRole() == UserRole.AGENT &&
+                    ticket.getAssignedAgent() != null &&
+                    ticket.getAssignedAgent().getId().equals(currentUser.getId());
+
+            if (isCustomer || isAssignedAgent) {
                 Comment comment = new Comment();
                 comment.setBody(body);
                 comment.setCreatedAt(new Date());
                 comment.setTicket(ticket);
                 comment.setUser(currentUser);
-
                 return commentRepository.save(comment).getCommentDto();
             } else {
-                // This error message is for development; in production, you might want a more generic "Access Denied".
                 throw new RuntimeException("User is not authorized to comment on this ticket.");
             }
         }
+
         throw new RuntimeException("User or Ticket not found.");
     }
 
+    // ✅ GET comments: Anyone (customer, agent, admin) can view comments
     @Override
     public List<CommentDto> getCommentsByTicketId(Long ticketId) {
         User currentUser = jwtUtil.getLoggedInUser();
@@ -60,12 +64,18 @@ public class CommentServiceImpl implements CommentService {
         if (currentUser != null && optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();
 
-            // Security Check: Customer, assigned Agent, or an Admin can view comments.
-            boolean isCustomer = currentUser.getUserRole() == UserRole.CUSTOMER && ticket.getCustomer().getId().equals(currentUser.getId());
-            boolean isAgent = currentUser.getUserRole() == UserRole.AGENT && ticket.getAssignedAgent() != null && ticket.getAssignedAgent().getId().equals(currentUser.getId());
+            boolean isCustomer = currentUser.getUserRole() == UserRole.CUSTOMER &&
+                    ticket.getCustomer().getId().equals(currentUser.getId());
+
+            boolean isAssignedAgent = currentUser.getUserRole() == UserRole.AGENT &&
+                    ticket.getAssignedAgent() != null &&
+                    ticket.getAssignedAgent().getId().equals(currentUser.getId());
+
+            boolean isAgent = currentUser.getUserRole() == UserRole.AGENT;
+
             boolean isAdmin = currentUser.getUserRole() == UserRole.ADMIN;
 
-            if (isCustomer || isAgent || isAdmin) {
+            if (isCustomer || isAssignedAgent || isAgent || isAdmin) {
                 return commentRepository.findAllByTicketId(ticketId).stream()
                         .map(Comment::getCommentDto)
                         .collect(Collectors.toList());
@@ -73,6 +83,7 @@ public class CommentServiceImpl implements CommentService {
                 throw new RuntimeException("User is not authorized to view comments on this ticket.");
             }
         }
+
         throw new RuntimeException("User or Ticket not found.");
     }
 }
