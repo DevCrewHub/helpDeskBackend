@@ -212,6 +212,7 @@ public class AgentServiceImpl implements AgentService {
 	    }
 
 	    ticket.setAssignedAgent(agent);
+	    ticket.setStatus(Status.INPROGRESS);
 	    Ticket updatedTicket = ticketRepository.save(ticket);
 	    return updatedTicket.getTicketDto();
     }
