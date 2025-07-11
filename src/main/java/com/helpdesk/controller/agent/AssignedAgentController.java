@@ -98,4 +98,9 @@ public class AssignedAgentController {
         }
     }
     
+    @GetMapping("/departments")
+	public ResponseEntity<?> getAllDepartments() {
+		return ResponseEntity.ok(agentService.getAllDepartments());
+	}
+    
 }

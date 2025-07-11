@@ -7,11 +7,14 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.helpdesk.dto.DepartmentDto;
 import com.helpdesk.dto.TicketDto;
+import com.helpdesk.entities.Department;
 import com.helpdesk.entities.Ticket;
 import com.helpdesk.entities.User;
 import com.helpdesk.enums.Priority;
 import com.helpdesk.enums.Status;
+import com.helpdesk.repositories.DepartmentRepository;
 import com.helpdesk.repositories.TicketRepository;
 import com.helpdesk.utils.JwtUtil;
 
@@ -23,6 +26,7 @@ public class AgentServiceImpl implements AgentService {
 
     private final TicketRepository ticketRepository;
     private final JwtUtil jwtUtil;
+    private final DepartmentRepository departmentRepository;
 
     @Override
     public List<TicketDto> getAssignedTickets() {
@@ -183,6 +187,18 @@ public class AgentServiceImpl implements AgentService {
 				.sorted(Comparator.comparing(Ticket::getCreatedDate).reversed())
 				.map(Ticket::getTicketDto)
 				.collect(Collectors.toList());
+	}
+	
+	private DepartmentDto convertToDto(Department department) {
+		DepartmentDto dto = new DepartmentDto();
+		dto.setId(department.getId());
+		dto.setName(department.getName());
+		return dto;
+	}
+	
+	@Override
+	public List<DepartmentDto> getAllDepartments() {
+		return departmentRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
 	}
 
 	@Override

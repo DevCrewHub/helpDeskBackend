@@ -1,6 +1,8 @@
 package com.helpdesk.services.agent;
 
 import java.util.List;
+
+import com.helpdesk.dto.DepartmentDto;
 import com.helpdesk.dto.TicketDto;
 import com.helpdesk.enums.Priority;
 import com.helpdesk.enums.Status;
@@ -23,5 +25,7 @@ public interface AgentService {
     List<TicketDto> filterTicketsByStatus(Status status);
     List<TicketDto> filterTicketsByDepartmentName(String name);
     TicketDto assignTicketToMe(Long ticketId);
+    
+    List<DepartmentDto> getAllDepartments();
      
 }

@@ -79,5 +79,10 @@ public class AgentController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+    
+    @GetMapping("/departments")
+	public ResponseEntity<?> getAllDepartments() {
+		return ResponseEntity.ok(agentService.getAllDepartments());
+	}
 
 }
