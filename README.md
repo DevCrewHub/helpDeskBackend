@@ -114,6 +114,8 @@ Use this interface to explore available endpoints, view request/response schemas
 - `GET /api/admin/agents` — Get all agents
 - `GET /api/admin/customers/search/{username}` — Search customers by username (partial match)
 - `GET /api/admin/agents/search/{username}` — Search agents by username (partial match)
+- `DELETE /api/admin/customers/{customerId}` — Delete a customer account and all their tickets with comments
+- `DELETE /api/admin/agents/{agentId}` — Delete an agent account with all the assigned tickets to that agent changed to unassigned and all their comments deleted
 
 ##### Department Admin APIs
 - `GET /api/admin/department` — Get all departments

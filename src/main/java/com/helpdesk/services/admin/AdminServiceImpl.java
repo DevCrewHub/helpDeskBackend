@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 
 import com.helpdesk.dto.TicketDto;
 import com.helpdesk.dto.UserDto;
+import com.helpdesk.entities.Comment;
 import com.helpdesk.entities.Ticket;
 import com.helpdesk.entities.User;
 import com.helpdesk.enums.Priority;
 import com.helpdesk.enums.Status;
 import com.helpdesk.enums.UserRole;
+import com.helpdesk.repositories.CommentRepository;
 import com.helpdesk.repositories.TicketRepository;
 import com.helpdesk.repositories.UserRepository;
 //import com.helpdesk.utils.JwtUtil;
@@ -27,6 +29,7 @@ public class AdminServiceImpl implements AdminService {
 	private final UserRepository userRepository;
 //	private final JwtUtil jwtUtil;
 	private final TicketRepository ticketRepository;
+	private final CommentRepository commentRepository;
 
 	@Override
 	public List<UserDto> getCustomers() {
@@ -130,6 +133,66 @@ public class AdminServiceImpl implements AdminService {
 				.sorted(Comparator.comparing(Ticket::getCreatedDate).reversed())
 				.map(Ticket::getTicketDto)
 				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public void deleteCustomer(Long customerId) {
+		Optional<User> optionalUser = userRepository.findById(customerId);
+		if (optionalUser.isEmpty()) {
+			throw new RuntimeException("Customer not found");
+		}
+		
+		User user = optionalUser.get();
+		if (user.getUserRole() != UserRole.CUSTOMER) {
+			throw new RuntimeException("User is not a customer");
+		}
+		
+		// Get all tickets created by this customer
+		List<Ticket> customerTickets = ticketRepository.findByCustomer(user);
+		
+		// Delete all comments on customer's tickets first
+		for (Ticket ticket : customerTickets) {
+			List<Comment> ticketComments = commentRepository.findByTicket(ticket);
+			commentRepository.deleteAll(ticketComments);
+		}
+		
+		// Delete all tickets created by this customer
+		ticketRepository.deleteAll(customerTickets);
+		
+		// Then delete the customer account
+		userRepository.deleteById(customerId);
+	}
+	
+	@Override
+	public void deleteAgent(Long agentId) {
+		Optional<User> optionalUser = userRepository.findById(agentId);
+		if (optionalUser.isEmpty()) {
+			throw new RuntimeException("Agent not found");
+		}
+		
+		User user = optionalUser.get();
+		if (user.getUserRole() != UserRole.AGENT) {
+			throw new RuntimeException("User is not an agent");
+		}
+		
+		// Delete all comments made by this agent
+		List<Comment> agentComments = commentRepository.findByUser(user);
+		commentRepository.deleteAll(agentComments);
+		
+		// Unassign all tickets from this agent
+		List<Ticket> assignedTickets = ticketRepository.findByAssignedAgent(user);
+		if (!assignedTickets.isEmpty()) {
+			assignedTickets.forEach(ticket -> {
+				ticket.setAssignedAgent(null);
+				if (ticket.getStatus() == Status.INPROGRESS) {
+					ticket.setStatus(Status.PENDING);
+				}
+			});
+			ticketRepository.saveAll(assignedTickets);
+		}
+		
+		// Delete the agent account
+		userRepository.deleteById(agentId);
 	}
 	
 }

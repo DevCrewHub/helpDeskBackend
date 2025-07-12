@@ -25,5 +25,8 @@ public interface AdminService {
 	List<TicketDto> filterTicketsByPriority(Priority priority);	
 	List<TicketDto> filterTicketsByStatus(Status status);
 	List<TicketDto> filterTicketsByDepartmentName(String name);
+	
+	void deleteCustomer(Long customerId);
+	void deleteAgent(Long agentId);
 
 }

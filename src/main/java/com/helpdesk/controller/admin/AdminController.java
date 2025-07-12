@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -124,5 +125,26 @@ public class AdminController {
     public ResponseEntity<List<TicketDto>> filterTicketsByDepartmentName(@PathVariable String name) {
     	return ResponseEntity.ok(adminService.filterTicketsByDepartmentName(name));
     }
+    
+    @DeleteMapping("/customers/{customerId}")
+	public ResponseEntity<?> deleteCustomer(@PathVariable Long customerId) {
+		try {
+			adminService.deleteCustomer(customerId);
+			return ResponseEntity.ok("Customer and all their tickets deleted successfully");
+		} catch (RuntimeException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
+	
+	// Delete agent account
+	@DeleteMapping("/agents/{agentId}")
+	public ResponseEntity<?> deleteAgent(@PathVariable Long agentId) {
+		try {
+			adminService.deleteAgent(agentId);
+			return ResponseEntity.ok("Agent deleted successfully. Their assigned tickets have been unassigned.");
+		} catch (RuntimeException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+	}
 
 }
