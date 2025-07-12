@@ -45,6 +45,22 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	@Override
+	public List<UserDto> searchCustomersByUsername(String username) {
+		return userRepository.findByUserRoleAndUserNameContaining(UserRole.CUSTOMER, username)
+				.stream()
+				.map(User::getUserDto)
+				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<UserDto> searchAgentsByUsername(String username) {
+		return userRepository.findByUserRoleAndUserNameContaining(UserRole.AGENT, username)
+				.stream()
+				.map(User::getUserDto)
+				.collect(Collectors.toList());
+	}
+	
+	@Override
 	public List<TicketDto> getAllTickets() {
 		return ticketRepository.findAll()
 				.stream()

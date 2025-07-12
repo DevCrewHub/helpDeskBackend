@@ -112,6 +112,8 @@ Use this interface to explore available endpoints, view request/response schemas
   ```
 - `GET /api/admin/customers` — Get all customers
 - `GET /api/admin/agents` — Get all agents
+- `GET /api/admin/customers/search/{username}` — Search customers by username (partial match)
+- `GET /api/admin/agents/search/{username}` — Search agents by username (partial match)
 
 ##### Department Admin APIs
 - `GET /api/admin/department` — Get all departments

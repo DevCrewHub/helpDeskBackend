@@ -52,6 +52,17 @@ public class AdminController {
 		return ResponseEntity.ok(adminService.getCustomers());
 	}
 	
+	// Search customers by username
+	@GetMapping("/customers/search/{username}")
+	public ResponseEntity<?> searchCustomersByUsername(@PathVariable String username) {
+		return ResponseEntity.ok(adminService.searchCustomersByUsername(username));
+	}
+	// Search agents by username
+	@GetMapping("/agents/search/{username}")
+	public ResponseEntity<?> searchAgentsByUsername(@PathVariable String username) {
+		return ResponseEntity.ok(adminService.searchAgentsByUsername(username));
+	}
+	
 	// Get all agents
 	@GetMapping("/agents")
 	public ResponseEntity<?> getAgents() {

@@ -12,6 +12,9 @@ public interface AdminService {
 	List<UserDto> getCustomers();
 	List<UserDto> getAgents();
 	
+	List<UserDto> searchCustomersByUsername(String username);
+	List<UserDto> searchAgentsByUsername(String username);
+	
 	List<TicketDto> getAllTickets();
 	TicketDto getTicketById(Long id);
 	
