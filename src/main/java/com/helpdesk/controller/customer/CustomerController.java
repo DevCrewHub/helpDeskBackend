@@ -1,5 +1,7 @@
 package com.helpdesk.controller.customer;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.helpdesk.dto.TicketDto;
+import com.helpdesk.enums.Priority;
 import com.helpdesk.enums.Status;
 import com.helpdesk.services.customer.CustomerService;
 
@@ -75,6 +78,33 @@ public class CustomerController {
     @GetMapping("/departments")
     public ResponseEntity<?> getAllDepartments() {
         return ResponseEntity.ok(customerService.getAllDepartments());
+    }
+    
+    @GetMapping("/tickets/priority/{priority}")
+    public ResponseEntity<List<TicketDto>> filterTicketsByPriority(@PathVariable String priority) {
+        try {
+            Priority priorityEnum = Priority.valueOf(priority.toUpperCase());
+            List<TicketDto> tickets = customerService.filterTicketsByPriority(priorityEnum);
+            return ResponseEntity.ok(tickets);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    
+    @GetMapping("/tickets/status/{status}")
+    public ResponseEntity<List<TicketDto>> filterTicketsByStatus(@PathVariable String status) {
+        try {
+            Status statusEnum = Status.valueOf(status.toUpperCase());
+            List<TicketDto> tickets = customerService.filterTicketsByStatus(statusEnum);
+            return ResponseEntity.ok(tickets);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    
+    @GetMapping("/tickets/department/{name}")
+    public ResponseEntity<List<TicketDto>> filterTicketsByDepartmentName(@PathVariable String name) {
+        return ResponseEntity.ok(customerService.filterTicketsByDepartmentName(name));
     }
 
 }

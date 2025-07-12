@@ -154,6 +154,9 @@ Use this interface to explore available endpoints, view request/response schemas
   *Note: Only status change to CLOSED is allowed. Once closed, the ticket cannot be updated further.*
 
 - `DELETE /api/customer/ticket/{id}` — Delete a ticket by its ID (only if created by the logged-in customer)
+- `GET /api/customer/tickets/priority/{priority}` — Filter tickets by priority (`LOW`, `MEDIUM`, `HIGH`)
+- `GET /api/customer/tickets/status/{status}` — Filter tickets by status (`PENDING`, `IN_PROGRESS`, `RESOLVED`, `CLOSED`)
+- `GET /api/customer/tickets/department/{name}` — Filter tickets by department name
 
 #### Agent APIs for assigned tickets
 

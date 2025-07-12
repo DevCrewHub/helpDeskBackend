@@ -17,6 +17,9 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> findByCustomer(User customer);
     List<Ticket> findByCustomerAndTitleContaining(User customer, String title);
     Ticket findTicketByCustomerAndId(User assignedAgent, Long id);
+    List<Ticket> findByCustomerAndPriority(User customer, Priority priority);
+    List<Ticket> findByCustomerAndStatus(User customer, Status status);
+    List<Ticket> findByCustomerAndDepartmentName(User customer, String name);
     
     //admin
     List<Ticket> findAllByTitleContaining(String title);

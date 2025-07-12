@@ -14,6 +14,7 @@ import com.helpdesk.dto.TicketDto;
 import com.helpdesk.entities.Ticket;
 import com.helpdesk.entities.User;
 import com.helpdesk.entities.Department;
+import com.helpdesk.enums.Priority;
 import com.helpdesk.enums.Status;
 import com.helpdesk.repositories.TicketRepository;
 import com.helpdesk.repositories.DepartmentRepository;
@@ -134,5 +135,44 @@ public class CustomerServiceImpl implements CustomerService {
 	public List<DepartmentDto> getAllDepartments() {
 		return departmentRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
 	}
+	
+	@Override
+    public List<TicketDto> filterTicketsByPriority(Priority priority) {
+        User customer = jwtUtil.getLoggedInUser();
+        if (customer != null) {
+            return ticketRepository.findByCustomerAndPriority(customer, priority)
+                    .stream()
+                    .sorted(Comparator.comparing(Ticket::getCreatedDate).reversed())
+                    .map(Ticket::getTicketDto)
+                    .collect(Collectors.toList());
+        }
+        return List.of();
+    }
+    
+    @Override
+    public List<TicketDto> filterTicketsByStatus(Status status) {
+        User customer = jwtUtil.getLoggedInUser();
+        if (customer != null) {
+            return ticketRepository.findByCustomerAndStatus(customer, status)
+                    .stream()
+                    .sorted(Comparator.comparing(Ticket::getCreatedDate).reversed())
+                    .map(Ticket::getTicketDto)
+                    .collect(Collectors.toList());
+        }
+        return List.of();
+    }
+    
+    @Override
+    public List<TicketDto> filterTicketsByDepartmentName(String name) {
+        User customer = jwtUtil.getLoggedInUser();
+        if (customer != null) {
+            return ticketRepository.findByCustomerAndDepartmentName(customer, name)
+                    .stream()
+                    .sorted(Comparator.comparing(Ticket::getCreatedDate).reversed())
+                    .map(Ticket::getTicketDto)
+                    .collect(Collectors.toList());
+        }
+        return List.of();
+    }
 
 }

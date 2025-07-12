@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.helpdesk.dto.DepartmentDto;
 import com.helpdesk.dto.TicketDto;
+import com.helpdesk.enums.Priority;
 import com.helpdesk.enums.Status;
 
 public interface CustomerService {
@@ -21,5 +22,9 @@ public interface CustomerService {
 	TicketDto getTicketById(Long id);
 	
 	List<DepartmentDto> getAllDepartments();
+	
+	List<TicketDto> filterTicketsByPriority(Priority priority);	
+	List<TicketDto> filterTicketsByStatus(Status status);
+	List<TicketDto> filterTicketsByDepartmentName(String name);
 
 }
