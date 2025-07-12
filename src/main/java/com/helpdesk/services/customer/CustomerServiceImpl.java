@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.helpdesk.dto.DepartmentDto;
 import com.helpdesk.dto.TicketDto;
 import com.helpdesk.entities.Ticket;
 import com.helpdesk.entities.User;
@@ -121,5 +122,17 @@ public class CustomerServiceImpl implements CustomerService {
         ticket.setStatus(Status.CLOSED);
         return ticketRepository.save(ticket).getTicketDto();
     }
+    
+    private DepartmentDto convertToDto(Department department) {
+		DepartmentDto dto = new DepartmentDto();
+		dto.setId(department.getId());
+		dto.setName(department.getName());
+		return dto;
+	}
+	
+	@Override
+	public List<DepartmentDto> getAllDepartments() {
+		return departmentRepository.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
+	}
 
 }

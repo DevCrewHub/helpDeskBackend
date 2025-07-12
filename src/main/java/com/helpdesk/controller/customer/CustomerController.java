@@ -71,5 +71,10 @@ public class CustomerController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+    
+    @GetMapping("/departments")
+    public ResponseEntity<?> getAllDepartments() {
+        return ResponseEntity.ok(customerService.getAllDepartments());
+    }
 
 }

@@ -2,6 +2,7 @@ package com.helpdesk.services.customer;
 
 import java.util.List;
 
+import com.helpdesk.dto.DepartmentDto;
 import com.helpdesk.dto.TicketDto;
 import com.helpdesk.enums.Status;
 
@@ -18,5 +19,7 @@ public interface CustomerService {
 	List<TicketDto> searchTicketByTitle(String title);
 	
 	TicketDto getTicketById(Long id);
+	
+	List<DepartmentDto> getAllDepartments();
 
 }
