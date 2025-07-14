@@ -1,6 +1,7 @@
 package com.helpdesk.controller.admin;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,14 +36,17 @@ public class AdminController {
 	@PostMapping("/register")
 	public ResponseEntity<?> signupAgent(@RequestBody SignupRequest signupRequest) {
 		if (authService.hasUserWithUsername(signupRequest.getUserName())) {
-			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Agent already exists with this username");
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+				.body(Map.of("error", "Username exists", "message", "Agent already exists with this username"));
 		}
 		if (authService.hasUserWithEmail(signupRequest.getEmail())) {
-			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Agent already exists with this email");
+			return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+				.body(Map.of("error", "Email exists", "message", "Agent already exists with this email"));
 		}
 		UserDto createdUserDto = authService.signupAgent(signupRequest);
 		if (createdUserDto == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Agent not created");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(Map.of("error", "Creation failed", "message", "Agent not created"));
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdUserDto);
 	}
@@ -76,10 +80,11 @@ public class AdminController {
     }
 	
 	@GetMapping("/ticket/{id}")
-    public ResponseEntity<TicketDto> getTicketById(@PathVariable Long id) {
+    public ResponseEntity<?> getTicketById(@PathVariable Long id) {
     	TicketDto ticket = adminService.getTicketById(id);
         if (ticket == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", "Ticket not found", "message", "No ticket found with ID: " + id));
         }
         return ResponseEntity.ok(ticket);
     }
@@ -90,7 +95,8 @@ public class AdminController {
             TicketDto updatedTicket = adminService.assignTicket(ticketId, agentId);
             return ResponseEntity.ok(updatedTicket);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "Assignment failed", "message", e.getMessage()));
         }
     }
 	
@@ -100,24 +106,28 @@ public class AdminController {
     }
     
     @GetMapping("/tickets/priority/{priority}")
-    public ResponseEntity<List<TicketDto>> filterTicketsByPriority(@PathVariable String priority) {
+    public ResponseEntity<?> filterTicketsByPriority(@PathVariable String priority) {
         try {
             Priority priorityEnum = Priority.valueOf(priority.toUpperCase());
             List<TicketDto> tickets = adminService.filterTicketsByPriority(priorityEnum);
             return ResponseEntity.ok(tickets);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "Invalid priority", "message", "Priority '" + priority + "' is not valid. Valid priorities are: " + 
+                    String.join(", ", java.util.Arrays.stream(Priority.values()).map(Enum::name).toArray(String[]::new))));
         }
     }
     
     @GetMapping("/tickets/status/{status}")
-    public ResponseEntity<List<TicketDto>> filterTicketsByStatus(@PathVariable String status) {
+    public ResponseEntity<?> filterTicketsByStatus(@PathVariable String status) {
         try {
         	Status statusEnum = Status.valueOf(status.toUpperCase());
             List<TicketDto> tickets = adminService.filterTicketsByStatus(statusEnum);
             return ResponseEntity.ok(tickets);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "Invalid status", "message", "Status '" + status + "' is not valid. Valid statuses are: " + 
+                    String.join(", ", java.util.Arrays.stream(Status.values()).map(Enum::name).toArray(String[]::new))));
         }
     }
     
@@ -130,9 +140,10 @@ public class AdminController {
 	public ResponseEntity<?> deleteCustomer(@PathVariable Long customerId) {
 		try {
 			adminService.deleteCustomer(customerId);
-			return ResponseEntity.ok("Customer and all their tickets deleted successfully");
+			return ResponseEntity.ok(Map.of("message", "Customer and all their tickets deleted successfully"));
 		} catch (RuntimeException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+			return ResponseEntity.badRequest()
+				.body(Map.of("error", "Delete failed", "message", e.getMessage()));
 		}
 	}
 	
@@ -141,9 +152,10 @@ public class AdminController {
 	public ResponseEntity<?> deleteAgent(@PathVariable Long agentId) {
 		try {
 			adminService.deleteAgent(agentId);
-			return ResponseEntity.ok("Agent deleted successfully. Their assigned tickets have been unassigned.");
+			return ResponseEntity.ok(Map.of("message", "Agent deleted successfully. Their assigned tickets have been unassigned."));
 		} catch (RuntimeException e) {
-			return ResponseEntity.badRequest().body(e.getMessage());
+			return ResponseEntity.badRequest()
+				.body(Map.of("error", "Delete failed", "message", e.getMessage()));
 		}
 	}
 

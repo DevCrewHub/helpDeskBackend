@@ -8,6 +8,7 @@ import com.helpdesk.dto.DepartmentDto;
 import com.helpdesk.services.admin.DepartmentService;
 
 import lombok.RequiredArgsConstructor;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,12 +28,17 @@ public class DepartmentController {
 		if (department != null) {
 			return ResponseEntity.ok(department);
 		}
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+			.body(Map.of("error", "Department not found", "message", "No department found with ID: " + id));
 	}
 
 	@PostMapping
 	public ResponseEntity<?> createDepartment(@RequestBody DepartmentDto departmentDto) {
 		DepartmentDto createdDepartment = departmentService.createDepartment(departmentDto);
+		if (createdDepartment == null) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(Map.of("error", "Creation failed", "message", "Department could not be created"));
+		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdDepartment);
 	}
 
@@ -42,12 +48,18 @@ public class DepartmentController {
 		if (updatedDepartment != null) {
 			return ResponseEntity.ok(updatedDepartment);
 		}
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.status(HttpStatus.NOT_FOUND)
+			.body(Map.of("error", "Update failed", "message", "No department found with ID: " + id));
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteDepartment(@PathVariable Long id) {
-		departmentService.deleteDepartment(id);
-		return ResponseEntity.ok().build();
+		try {
+			departmentService.deleteDepartment(id);
+			return ResponseEntity.ok(Map.of("message", "Department deleted successfully"));
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(Map.of("error", "Delete failed", "message", e.getMessage()));
+		}
 	}
 }

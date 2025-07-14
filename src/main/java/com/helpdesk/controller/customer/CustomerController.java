@@ -1,6 +1,7 @@
 package com.helpdesk.controller.customer;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +30,12 @@ public class CustomerController {
 	private final CustomerService customerService;
 
 	@PostMapping("/ticket")
-	public ResponseEntity<TicketDto> createTicket(@RequestBody TicketDto ticketDto) {
+	public ResponseEntity<?> createTicket(@RequestBody TicketDto ticketDto) {
 		TicketDto createTicketDto = customerService.createTicket(ticketDto);
 		if (createTicketDto == null) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();		}
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+				.body(Map.of("error", "Failed to create ticket", "message", "Ticket creation failed"));
+		}
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(createTicketDto);
 	}
@@ -54,10 +57,11 @@ public class CustomerController {
     }
     
     @GetMapping("/ticket/{id}")
-    public ResponseEntity<TicketDto> getTicketById(@PathVariable Long id) {
+    public ResponseEntity<?> getTicketById(@PathVariable Long id) {
     	TicketDto ticket = customerService.getTicketById(id);
         if (ticket == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("error", "Ticket not found", "message", "No ticket found with ID: " + id));
         }
         return ResponseEntity.ok(ticket);
     }
@@ -69,9 +73,12 @@ public class CustomerController {
             TicketDto updatedTicket = customerService.updateTicketStatus(ticketId, newStatus);
             return ResponseEntity.ok(updatedTicket);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Invalid status: " + status);
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "Invalid status", "message", "Status '" + status + "' is not valid. Valid statuses are: " + 
+                    String.join(", ", java.util.Arrays.stream(Status.values()).map(Enum::name).toArray(String[]::new))));
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest()
+                .body(Map.of("error", "Update failed", "message", e.getMessage()));
         }
     }
     
