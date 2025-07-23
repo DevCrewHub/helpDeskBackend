@@ -2,21 +2,30 @@ package com.helpdesk.dto;
 
 import lombok.Data;
 
-@Data
+/**
+ * DTO for capturing user signup details from the client.
+ */
+@Data  // Lombok annotation to auto-generate getters, setters, toString, equals, and hashCode
 public class SignupRequest {
 
-	private String userName;
+    // Username chosen by the user
+    private String userName;
 
-	private String email;
+    // User's email address
+    private String email;
 
-	private String password;
+    // Password provided during signup
+    private String password;
 
-	private String fullName;
+    // Full name of the user
+    private String fullName;
 
-	private String phoneNumber;
+    // Contact phone number of the user
+    private String phoneNumber;
 
-	private String userRole;
+    // Role of the user (e.g., ADMIN, AGENT, CUSTOMER)
+    private String userRole;
 
-	private String departmentName;
-
+    // Name of the department the user belongs to
+    private String departmentName;
 }

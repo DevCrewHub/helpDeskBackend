@@ -1,28 +1,35 @@
 package com.helpdesk.dto;
 
 import com.helpdesk.enums.UserRole;
-
 import lombok.Data;
 
-@Data
+@Data // Lombok annotation to generate getters, setters, toString, equals, and hashCode
 public class UserDto {
 
-	private Long id;
+    // Unique identifier for the user
+    private Long id;
 
-	private String userName;
+    // Username of the user (used for login)
+    private String userName;
 
-	private String email;
+    // Email address of the user
+    private String email;
 
-	private String password;
+    // Password of the user (should be stored in encrypted form)
+    private String password;
 
-	private String fullName;
+    // Full name of the user
+    private String fullName;
 
-	private String phoneNumber;
+    // Contact number of the user
+    private String phoneNumber;
 
-	private UserRole userRole;
+    // Role of the user (e.g., ADMIN, AGENT, CUSTOMER)
+    private UserRole userRole;
 
-	private Long departmentId;
+    // ID of the department the user is assigned to (for agents)
+    private Long departmentId;
 
-	private String departmentName;
-
+    // Name of the department the user is assigned to
+    private String departmentName;
 }

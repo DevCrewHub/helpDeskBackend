@@ -10,21 +10,33 @@ import com.helpdesk.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor // Generates a constructor with required arguments (final fields)
 public class UserServiceImpl implements UserService {
 
-	private final UserRepository userRepository;
+    // Repository to fetch user data from the database
+    private final UserRepository userRepository;
 
-	@Override
-	public UserDetailsService userDetailService() {
-		return new UserDetailsService() {
-			@Override
-			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-				return userRepository.findByUserName(username)
-						.orElseThrow(() -> new UsernameNotFoundException("User not found"));
-			}
-
-		};
-	}
+    /**
+     * Provides a UserDetailsService implementation used by Spring Security to load user-specific data.
+     * 
+     * @return UserDetailsService instance with custom user loading logic
+     */
+    @Override
+    public UserDetailsService userDetailService() {
+        return new UserDetailsService() {
+            /**
+             * Loads user by username from the database.
+             * 
+             * @param username the username to search for
+             * @return UserDetails object if found
+             * @throws UsernameNotFoundException if user is not found
+             */
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                return userRepository.findByUserName(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            }
+        };
+    }
 
 }

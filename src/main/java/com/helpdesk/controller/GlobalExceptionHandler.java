@@ -12,73 +12,96 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Global exception handler for the application.
+ * Catches and handles common exceptions in a structured way for consistent error responses.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * Handles authentication failures due to incorrect credentials.
+     */
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<Map<String, Object>> handleBadCredentialsException(BadCredentialsException e) {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("error", "Authentication failed");
         errorResponse.put("message", e.getMessage());
         errorResponse.put("status", HttpStatus.UNAUTHORIZED.value());
-        
+
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
+    /**
+     * Handles illegal arguments passed to controller methods.
+     */
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(IllegalArgumentException e) {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("error", "Invalid argument");
         errorResponse.put("message", e.getMessage());
         errorResponse.put("status", HttpStatus.BAD_REQUEST.value());
-        
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    /**
+     * Handles cases where a request parameter cannot be converted to the required type.
+     */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Map<String, Object>> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException e) {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("error", "Type mismatch");
         errorResponse.put("message", "Parameter '" + e.getName() + "' should be of type " + e.getRequiredType().getSimpleName());
         errorResponse.put("status", HttpStatus.BAD_REQUEST.value());
-        
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    /**
+     * Handles validation failures on method arguments (e.g., @Valid annotated DTOs).
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException e) {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("error", "Validation failed");
         errorResponse.put("status", HttpStatus.BAD_REQUEST.value());
-        
+
+        // Extract all field-specific validation errors
         Map<String, String> fieldErrors = new HashMap<>();
         e.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             fieldErrors.put(fieldName, errorMessage);
         });
+
         errorResponse.put("fieldErrors", fieldErrors);
-        
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    /**
+     * Handles uncaught runtime exceptions in the application.
+     */
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, Object>> handleRuntimeException(RuntimeException e) {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("error", "Runtime error");
         errorResponse.put("message", e.getMessage());
         errorResponse.put("status", HttpStatus.BAD_REQUEST.value());
-        
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    /**
+     * Catch-all handler for all other exceptions not specifically handled above.
+     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGenericException(Exception e) {
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("error", "Internal server error");
         errorResponse.put("message", e.getMessage());
         errorResponse.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
-        
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
-} 
+}

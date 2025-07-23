@@ -8,37 +8,45 @@ import com.helpdesk.enums.Status;
 
 import lombok.Data;
 
-@Data
+@Data // Lombok annotation to generate boilerplate code (getters, setters, etc.)
 public class TicketDto {
 
-	private Long id;
+    // Unique identifier for the ticket
+    private Long id;
 
-	private String title;
+    // Title of the ticket
+    private String title;
 
-	private String description;
-	
-	// Auto-set
-	private Date createdDate;
+    // Detailed description of the issue
+    private String description;
+    
+    // Timestamp when the ticket was created (auto-set)
+    private Date createdDate;
 
-	private Priority priority;
+    // Priority level of the ticket (e.g., LOW, MEDIUM, HIGH)
+    private Priority priority;
 
-	private Status status;
+    // Current status of the ticket (e.g., PENDING, INPROGRESS, RESOLVED)
+    private Status status;
 
-	// Auto-set from logged-in user, not required in request
-	private Long customerId;
+    // ID of the customer who created the ticket (auto-set from logged-in user)
+    private Long customerId;
 
-	// Auto-set from logged-in user, not required in request
-	private String customerName;
+    // Name of the customer who created the ticket (auto-set from logged-in user)
+    private String customerName;
 
-	private Long agentId;
+    // ID of the agent assigned to this ticket
+    private Long agentId;
 
-	private String agentName;
+    // Name of the agent assigned to this ticket
+    private String agentName;
 
-	private Long departmentId;
+    // ID of the department the ticket is associated with
+    private Long departmentId;
 
-	private String departmentName;
+    // Name of the department the ticket is associated with
+    private String departmentName;
 
-	private List<CommentDto> comments;
-
-
+    // List of comments associated with this ticket
+    private List<CommentDto> comments;
 }

@@ -12,12 +12,16 @@ import com.helpdesk.enums.UserRole;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	Optional<User> findByUserName(String username);
+    // Find a user by their username (used for login/authentication)
+    Optional<User> findByUserName(String username);
 
-	Optional<User> findFirstByEmail(String email);
+    // Find the first user with the given email address (used for signup or duplicate check)
+    Optional<User> findFirstByEmail(String email);
 
-	Optional<User> findByUserRole(UserRole userRole);
-	
-	List<User> findByUserRoleAndUserNameContaining(UserRole userRole, String username);
+    // Find a user by their role (e.g., ADMIN, AGENT, CUSTOMER)
+    Optional<User> findByUserRole(UserRole userRole);
+
+    // Find users with a specific role whose username contains a given substring (for filtering/search)
+    List<User> findByUserRoleAndUserNameContaining(UserRole userRole, String username);
 
 }
