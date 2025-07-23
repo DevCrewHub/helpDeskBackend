@@ -10,18 +10,28 @@ import com.helpdesk.services.admin.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import java.util.Map;
 
+/**
+ * REST controller for managing departments.
+ * Provides CRUD operations for admin users to manage departments in the system.
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/department")
 public class DepartmentController {
 
-	private final DepartmentService departmentService;
+	private final DepartmentService departmentService; // Service layer for department operations
 
+	/**
+	 * Retrieves a list of all departments.
+	 */
 	@GetMapping
 	public ResponseEntity<?> getAllDepartments() {
 		return ResponseEntity.ok(departmentService.getAllDepartments());
 	}
 
+	/**
+	 * Retrieves a department by its ID.
+	 */
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getDepartmentById(@PathVariable Long id) {
 		DepartmentDto department = departmentService.getDepartmentById(id);
@@ -32,6 +42,9 @@ public class DepartmentController {
 			.body(Map.of("error", "Department not found", "message", "No department found with ID: " + id));
 	}
 
+	/**
+	 * Creates a new department.
+	 */
 	@PostMapping
 	public ResponseEntity<?> createDepartment(@RequestBody DepartmentDto departmentDto) {
 		DepartmentDto createdDepartment = departmentService.createDepartment(departmentDto);
@@ -42,6 +55,9 @@ public class DepartmentController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(createdDepartment);
 	}
 
+	/**
+	 * Updates an existing department by its ID.
+	 */
 	@PutMapping("/{id}")
 	public ResponseEntity<?> updateDepartment(@PathVariable Long id, @RequestBody DepartmentDto departmentDto) {
 		DepartmentDto updatedDepartment = departmentService.updateDepartment(id, departmentDto);
@@ -52,6 +68,9 @@ public class DepartmentController {
 			.body(Map.of("error", "Update failed", "message", "No department found with ID: " + id));
 	}
 
+	/**
+	 * Deletes a department by its ID.
+	 */
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteDepartment(@PathVariable Long id) {
 		try {

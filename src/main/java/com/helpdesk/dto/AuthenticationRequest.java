@@ -2,11 +2,17 @@ package com.helpdesk.dto;
 
 import lombok.Data;
 
-@Data
+/**
+ * DTO for handling authentication requests.
+ * It contains the username and password provided by the user during login.
+ */
+@Data  // Lombok annotation to generate getters, setters, toString, equals, and hashCode
 public class AuthenticationRequest {
 
-	private String userName;
+    // Username provided by the user during login
+    private String userName;
 
-	private String password;
+    // Password provided by the user during login
+    private String password;
 
 }
